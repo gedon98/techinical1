@@ -8,14 +8,15 @@ import tech.messageproc.output.AdjustmentsPrinter;
 import tech.messageproc.output.ProductTotalPrinter;
 
 public class SalesLedgerController {
-	private SalesLedger ledger = new SalesLedger();
+	SalesLedger ledger = new SalesLedger();
+
 
 	public void handleMessage(String inMessage) {
 		String[] args = inMessage.split(",");
 		try {
 			MessageType type = MessageType.valueOf(args[0]);
 			if (type == MessageType.SingleSale) {
-				handleSale(new SaleMessagePayload(1, args));
+				handleSale(new SaleMessagePayload(args[1], 1, Double.valueOf(args[2])));
 			}
 			if (type == MessageType.Sales) {
 				handleSale(new SaleMessagePayload(args));
@@ -32,7 +33,7 @@ public class SalesLedgerController {
 	private void handleSale(SaleMessagePayload saleMessagePayload) {
 		if (ledger.ledgerSize() < 50) {
 			ledger.addSale(saleMessagePayload);
-			if (ledger.ledgerSize() == 10) {
+			if (ledger.ledgerSize() % 10 == 0) {
 				System.out.println(ProductTotalPrinter.printProductTotals(ledger));
 			}
 			if (ledger.ledgerSize() == 50) {

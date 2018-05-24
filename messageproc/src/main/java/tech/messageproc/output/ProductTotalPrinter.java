@@ -10,8 +10,9 @@ public class ProductTotalPrinter {
 		for (Product product : ledger.getProductList().allProducts()) {
 			builder.append("Product :");
 			builder.append(product.getName());
-			builder.append("Total :");
+			builder.append(" Total :");
 			builder.append(ledger.getSalesTotalByProduct(product.getName()));
+			builder.append("\n");
 		}		
 		return builder.toString();
 	}
